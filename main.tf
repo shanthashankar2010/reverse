@@ -200,7 +200,7 @@ resource "aws_security_group" "private_sg" {
 # Temporary Public EC2 to install Apache and create AMI
 resource "aws_instance" "apache_builder" {
   ami                         = data.aws_ami.ubuntu.id
-  instance_type               = "t3.large"
+  instance_type               = "t2.xlarge"
   key_name                    = "bastion"
   subnet_id                   = aws_subnet.public.id
   vpc_security_group_ids      = [aws_security_group.apache_builder_sg.id]
@@ -260,7 +260,7 @@ resource "aws_ec2_instance_state" "stop_apache_builder" {
 # Private Apache Server from custom AMI
 resource "aws_instance" "private" {
   ami                         = aws_ami_from_instance.apache.id
-  instance_type               = "t3.large"
+  instance_type               = "t2.xlarge"
   key_name                    = "bastion"
   subnet_id                   = aws_subnet.private.id
   vpc_security_group_ids      = [aws_security_group.private_sg.id]
@@ -284,7 +284,7 @@ resource "aws_instance" "private" {
 # Public Nginx Reverse Proxy Server
 resource "aws_instance" "bastion" {
   ami                         = data.aws_ami.ubuntu.id
-  instance_type               = "t3.large"
+  instance_type               = "t2.xlarge"
   key_name                    = "bastion"
   subnet_id                   = aws_subnet.public.id
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
